@@ -1,11 +1,18 @@
 #include<iostream>
+#include<cstdlib>
 #include"dotenv.h"
 
 int main()
 {
-    dotenv::init();
-    std::cout << "BASE_PATH: " << std::getenv("BASE_PATH") << std::endl;
-    std::cout << "LOG_PATH: " << std::getenv("LOG_PATH") << std::endl;
-    std::cout << "CONFIG_PATH: " << std::getenv("CONFIG_PATH") << std::endl;
+    // 先设置一个环境变量
+    _putenv("DATABASE_HOST=already_set");
+
+    std::cout << "Before init: " << std::getenv("DATABASE_HOST") << std::endl;
+
+    // 使用Preserve模式，不覆盖已有变量
+    dotenv::init(dotenv::Preserve);
+
+    std::cout << "After init with Preserve: " << std::getenv("DATABASE_HOST") << std::endl;
+
     return 0;
 }
