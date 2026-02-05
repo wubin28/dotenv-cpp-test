@@ -125,7 +125,7 @@ git --version
 
 ```powershell
 # 根据您的VS版本类型替换路径中的Community/Professional/Enterprise
-& "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\Launch-VsDevShell.ps1"
+& "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
 ```
 
 然后测试编译器：
@@ -142,7 +142,7 @@ cl
 
 ```powershell
 # 将路径中的Community替换为您的VS版本类型
-& "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\Launch-VsDevShell.ps1"
+& "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
 ```
 
 执行成功后会显示：
@@ -429,6 +429,12 @@ cd build
 **步骤3**：配置CMake项目
 
 ```powershell
+& "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
+
+cl
+
+cd <path-to-dotenv-cpp>\build
+
 # 配置项目，启用测试，禁用文档生成
 cmake .. -G "Visual Studio 17 2022" -A x64 -DBUILD_TESTS=ON -DBUILD_DOCS=OFF
 ```
@@ -443,15 +449,71 @@ cmake .. -G "Visual Studio 17 2022" -A x64 -DBUILD_TESTS=ON -DBUILD_DOCS=OFF
 **预期输出**（关键信息）：
 
 ```
--- The CXX compiler identification is MSVC 19.xx.xxxxx
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.26200.
+-- The CXX compiler identification is MSVC 19.50.35723.0
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/.../cl.exe - skipped
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Configuring done
--- Generating done
--- Build files have been written to: .../build
+CMake Warning (dev) at C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/FetchContent.cmake:1373 (message):
+  The DOWNLOAD_EXTRACT_TIMESTAMP option was not given and policy CMP0135 is
+  not set.  The policy's OLD behavior will be used.  When using a URL
+  download, the timestamps of extracted files should preferably be that of
+  the time of extraction, otherwise code that depends on the extracted
+  contents might not be rebuilt if the URL changes.  The OLD behavior
+  preserves the timestamps from the archive instead, but this is usually not
+  what you want.  Update your project to the NEW behavior or specify the
+  DOWNLOAD_EXTRACT_TIMESTAMP option with a value of true to avoid this
+  robustness issue.
+Call Stack (most recent call first):
+  CMakeLists.txt:79 (fetchcontent_declare)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Deprecation Warning at build/_deps/googletest-src/CMakeLists.txt:4 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- The C compiler identification is MSVC 19.50.35723.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+CMake Deprecation Warning at build/_deps/googletest-src/googlemock/CMakeLists.txt:39 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at build/_deps/googletest-src/googletest/CMakeLists.txt:49 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Could NOT find Python (missing: Python_EXECUTABLE Interpreter)
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Configuring done (15.7s)
+-- Generating done (0.1s)
+-- Build files have been written to: C:/Users/wubin/OOR/katas/dotenv-cpp/build
 ```
 
 **验证点**：
@@ -479,13 +541,41 @@ cmake --build . --config Release
 **预期输出**：
 
 ```
-Microsoft (R) Build Engine version 17.x.xxxxx
-  ...
-  Building Custom Rule ...
-  Fetching googletest...
-  ...
-  tests.vcxproj -> ...\build\Release\tests.exe
-Build succeeded.
+MSBuild version 18.0.5+e22287bf1 for .NET Framework
+
+  Checking File Globs
+  1>Checking Build System
+  Building Custom Rule C:/Users/wubin/OOR/katas/dotenv-cpp/build/_deps/googletest-src/googlemock/CMakeLists.txt
+  gtest-all.cc
+  gmock-all.cc
+  Generating Code...
+  gmock.vcxproj -> C:\Users\wubin\OOR\katas\dotenv-cpp\build\lib\Release\gmock.lib
+  Building Custom Rule C:/Users/wubin/OOR/katas/dotenv-cpp/build/_deps/googletest-src/googlemock/CMakeLists.txt
+  gtest-all.cc
+  gmock-all.cc
+  gmock_main.cc
+  Generating Code...
+  gmock_main.vcxproj -> C:\Users\wubin\OOR\katas\dotenv-cpp\build\lib\Release\gmock_main.lib
+  Building Custom Rule C:/Users/wubin/OOR/katas/dotenv-cpp/build/_deps/googletest-src/googletest/CMakeLists.txt
+  gtest-all.cc
+  gtest.vcxproj -> C:\Users\wubin\OOR\katas\dotenv-cpp\build\lib\Release\gtest.lib
+  Building Custom Rule C:/Users/wubin/OOR/katas/dotenv-cpp/build/_deps/googletest-src/googletest/CMakeLists.txt
+  gtest_main.cc
+  gtest_main.vcxproj -> C:\Users\wubin\OOR\katas\dotenv-cpp\build\lib\Release\gtest_main.lib
+  Building Custom Rule C:/Users/wubin/OOR/katas/dotenv-cpp/CMakeLists.txt
+  base_test.cc
+C:\Users\wubin\OOR\katas\dotenv-cpp\include\laserpants\dotenv\dotenv.h(162,28): warning C4996: 'getenv': This function or varia
+ble may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for d
+etails. [C:\Users\wubin\OOR\katas\dotenv-cpp\build\tests.vcxproj]
+  (compiling source file '../tests/base_test.cc')
+
+C:\Users\wubin\OOR\katas\dotenv-cpp\include\laserpants\dotenv\dotenv.h(295,43): warning C4996: 'getenv': This function or varia
+ble may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for d
+etails. [C:\Users\wubin\OOR\katas\dotenv-cpp\build\tests.vcxproj]
+  (compiling source file '../tests/base_test.cc')
+
+  tests.vcxproj -> C:\Users\wubin\OOR\katas\dotenv-cpp\build\Release\tests.exe
+  Building Custom Rule C:/Users/wubin/OOR/katas/dotenv-cpp/CMakeLists.txt
 ```
 
 **验证点**：
@@ -502,6 +592,8 @@ ls Release\tests.exe
 **运行CMake测试**：
 
 ```powershell
+# 在build目录下创建.env.example文件并插入一行“DEFINED_VAR="OLHE"”
+
 # 使用ctest运行所有测试
 ctest -C Release --output-on-failure
 ```
@@ -514,11 +606,11 @@ ctest -C Release --output-on-failure
 **预期输出**：
 
 ```
-Test project C:/Users/.../dotenv-cpp/build
+Test project C:/Users/wubin/OOR/katas/dotenv-cpp/build
     Start 1: BaseTestFixture.ReadUndefinedVariableWithDefaultValue
 1/2 Test #1: BaseTestFixture.ReadUndefinedVariableWithDefaultValue ...   Passed    0.01 sec
     Start 2: BaseTestFixture.ReadDefinedVariableWithDefaultValue
-2/2 Test #2: BaseTestFixture.ReadDefinedVariableWithDefaultValue ...   Passed    0.01 sec
+2/2 Test #2: BaseTestFixture.ReadDefinedVariableWithDefaultValue .....   Passed    0.01 sec
 
 100% tests passed, 0 tests failed out of 2
 
@@ -535,6 +627,7 @@ Total Test time (real) =   0.03 sec
 **预期输出**：
 
 ```
+Running main() from C:\Users\wubin\OOR\katas\dotenv-cpp\build\_deps\googletest-src\googletest\src\gtest_main.cc
 [==========] Running 2 tests from 1 test suite.
 [----------] Global test environment set-up.
 [----------] 2 tests from BaseTestFixture
@@ -542,10 +635,10 @@ Total Test time (real) =   0.03 sec
 [       OK ] BaseTestFixture.ReadUndefinedVariableWithDefaultValue (0 ms)
 [ RUN      ] BaseTestFixture.ReadDefinedVariableWithDefaultValue
 [       OK ] BaseTestFixture.ReadDefinedVariableWithDefaultValue (0 ms)
-[----------] 2 tests from BaseTestFixture (0 ms total)
+[----------] 2 tests from BaseTestFixture (2 ms total)
 
 [----------] Global test environment tear-down
-[==========] 2 tests from 1 test suite ran. (1 ms total)
+[==========] 2 tests from 1 test suite ran. (4 ms total)
 [  PASSED  ] 2 tests.
 ```
 
@@ -554,6 +647,7 @@ Total Test time (real) =   0.03 sec
 **注意**：此步骤需要管理员权限。
 
 **以管理员身份运行PowerShell**：
+- 在windows terminal中按住Ctrl键选择Powershell 7
 - 按`Win+X`，选择”Windows Terminal (管理员)”
 - 或在开始菜单中右键PowerShell图标 → “以管理员身份运行”
 
@@ -574,11 +668,70 @@ cmake --install . --config Release
 **预期输出**：
 
 ```
--- Install configuration: "Release"
--- Installing: C:/Program Files (x86)/laserpants_dotenv/include/laserpants/dotenv-0.9.3/laserpants_dotenv-config.h
--- Installing: C:/Program Files (x86)/laserpants_dotenv/include/laserpants/dotenv-0.9.3/dotenv.h
--- Installing: C:/Program Files (x86)/laserpants_dotenv/lib/cmake/laserpants_dotenv/laserpants_dotenv-config.cmake
-...
+-- Installing: C:/Program Files/laserpants_dotenv/include/laserpants/dotenv-0.9.3/laserpants_dotenv-config.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/laserpants/dotenv-0.9.3/dotenv.h
+-- Installing: C:/Program Files/laserpants_dotenv/lib/cmake/laserpants_dotenv/laserpants_dotenv-config.cmake
+-- Installing: C:/Program Files/laserpants_dotenv/lib/cmake/laserpants_dotenv/dotenv.cmake
+-- Up-to-date: C:/Program Files/laserpants_dotenv/include
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/gmock-actions.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/gmock-cardinalities.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/gmock-function-mocker.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/gmock-matchers.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/gmock-more-actions.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/gmock-more-matchers.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/gmock-nice-strict.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/gmock-spec-builders.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/gmock.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/internal
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/internal/custom
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/internal/custom/gmock-generated-actions.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/internal/custom/gmock-matchers.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/internal/custom/gmock-port.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/internal/custom/README.md
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/internal/gmock-internal-utils.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/internal/gmock-port.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gmock/internal/gmock-pp.h
+-- Installing: C:/Program Files/laserpants_dotenv/lib/gmock.lib
+-- Installing: C:/Program Files/laserpants_dotenv/lib/gmock_main.lib
+-- Installing: C:/Program Files/laserpants_dotenv/lib/pkgconfig/gmock.pc
+-- Installing: C:/Program Files/laserpants_dotenv/lib/pkgconfig/gmock_main.pc
+-- Installing: C:/Program Files/laserpants_dotenv/lib/cmake/GTest/GTestTargets.cmake
+-- Installing: C:/Program Files/laserpants_dotenv/lib/cmake/GTest/GTestTargets-release.cmake
+-- Installing: C:/Program Files/laserpants_dotenv/lib/cmake/GTest/GTestConfigVersion.cmake
+-- Installing: C:/Program Files/laserpants_dotenv/lib/cmake/GTest/GTestConfig.cmake
+-- Up-to-date: C:/Program Files/laserpants_dotenv/include
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest-assertion-result.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest-death-test.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest-matchers.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest-message.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest-param-test.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest-printers.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest-spi.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest-test-part.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest-typed-test.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest_pred_impl.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/gtest_prod.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/custom
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/custom/gtest-port.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/custom/gtest-printers.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/custom/gtest.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/custom/README.md
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/gtest-death-test-internal.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/gtest-filepath.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/gtest-internal.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/gtest-param-util.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/gtest-port-arch.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/gtest-port.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/gtest-string.h
+-- Installing: C:/Program Files/laserpants_dotenv/include/gtest/internal/gtest-type-util.h
+-- Installing: C:/Program Files/laserpants_dotenv/lib/gtest.lib
+-- Installing: C:/Program Files/laserpants_dotenv/lib/gtest_main.lib
+-- Installing: C:/Program Files/laserpants_dotenv/lib/pkgconfig/gtest.pc
+-- Installing: C:/Program Files/laserpants_dotenv/lib/pkgconfig/gtest_main.pc
 ```
 
 **自定义安装路径**（可选，无需管理员权限）：
@@ -592,7 +745,7 @@ cmake --install . --config Release --prefix C:\local\dotenv
 
 ```powershell
 # 检查安装的头文件（根据实际安装路径调整）
-ls "C:\Program Files (x86)\laserpants_dotenv\include\laserpants\dotenv-0.9.3\dotenv.h"
+ls "C:/Program Files/laserpants_dotenv/include/laserpants/dotenv-0.9.3/dotenv.h"
 ```
 
 ### 2.2.5 创建新项目使用
