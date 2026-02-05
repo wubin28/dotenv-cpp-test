@@ -754,11 +754,11 @@ ls "C:/Program Files/laserpants_dotenv/include/laserpants/dotenv-0.9.3/dotenv.h"
 
 ```powershell
 cd $HOME
-mkdir my-dotenv-project
-cd my-dotenv-project
+mkdir dotenv-cpp-test-2026-02-05--14-09
+cd dotenv-cpp-test-2026-02-05--14-09
 ```
 
-**步骤2**：创建CMakeLists.txt
+**步骤2**：用vscode创建CMakeLists.txt
 
 ```
 cmake_minimum_required(VERSION 3.10)
@@ -774,21 +774,8 @@ add_executable(my_app main.cpp)
 target_link_libraries(my_app laserpants::dotenv)
 ```
 
-**创建方式**：
 
-```powershell
-@"
-cmake_minimum_required(VERSION 3.10)
-project(my_app)
-
-find_package(laserpants_dotenv REQUIRED)
-
-add_executable(my_app main.cpp)
-target_link_libraries(my_app laserpants::dotenv)
-"@ | Out-File -Encoding utf8 CMakeLists.txt
-```
-
-**步骤3**：创建main.cpp
+**步骤3**：用vscode创建main.cpp
 
 ```cpp
 #include<iostream>
@@ -803,19 +790,10 @@ int main()
 }
 ```
 
-**创建方式**：
+**步骤4**：用vscode创建.env文件
 
 ```powershell
-notepad main.cpp
-# 粘贴上述代码，保存
-```
-
-**步骤4**：创建.env文件
-
-```powershell
-@"
 DATABASE_HOST=production.example.com
-"@ | Out-File -Encoding utf8 .env
 ```
 
 **步骤5**：编译和运行
@@ -826,7 +804,7 @@ mkdir build
 cd build
 
 # 配置（如果使用自定义安装路径，需要设置CMAKE_PREFIX_PATH）
-cmake .. -G "Visual Studio 17 2022" -A x64
+cmake .. -G "Visual Studio 18 2026" -A x64
 
 # 如果dotenv安装在自定义路径，添加CMAKE_PREFIX_PATH：
 # cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH=C:\local\dotenv
@@ -836,7 +814,7 @@ cmake --build . --config Release
 
 # 进入Release目录，复制.env文件
 cd Release
-cp ..\..\. env .
+cp ..\..\.env .
 
 # 运行
 .\my_app.exe
